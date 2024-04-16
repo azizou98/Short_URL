@@ -38,13 +38,15 @@ app.post('/api/shorturl', function(req, res) {
         short_url : shorturl
       }
        urlstack.push(urlobject);
-      
+       res.json(urlobject)
     }
   });
 
   console.log(`Listening to api shorturl\t`+new URL(url).hostname);
+});
 
- // res.json({ greeting: 'hello API' });
+app.get('/', function(req, res) {
+  res.sendFile(process.cwd() + '/views/index.html');
 });
 
 app.listen(port, function() {
