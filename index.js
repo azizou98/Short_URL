@@ -21,11 +21,11 @@ app.get('/', function(req, res) {
 // Your first API endpoint
 app.post('/api/shorturl', function(req, res) {
   const url = req.body.url;
-
+  // validating the http part alone
   if (!url || !url.startsWith('http') || !url.startsWith('https')) {
     return res.status(400).send({ error: 'invalid url' });
   }
-
+ // validating the hostname 
   dns.lookup(new URL(url).hostname, (err) => {
     if (err) {
       return res.status(404).send({ error: 'invalid url' });
