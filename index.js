@@ -3,6 +3,8 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 const bodyparser = require('body-parser');
+const dns = require('dns');
+const { url } = require('inspector');
 
 // Basic Configuration
 const port = process.env.PORT || 3000;
@@ -18,10 +20,23 @@ app.get('/', function(req, res) {
 
 // Your first API endpoint
 app.post('/api/shorturl', function(req, res) {
+  const url = req.body.url;
 
-  console.log(`Listening to api shorturl`);
+  if (!url || !url.startsWith('http') || !url.startsWith('https')) {
+    return res.status(400).send({ error: 'invalid url' });
+  }
 
-  res.json({ greeting: 'hello API' });
+  dns.lookup(new URL(url).hostname, (err) => {
+    if (err) {
+      return res.status(404).send({ error: 'invalid url' });
+    } else {
+      return res.status(200).send({ message: 'URL is valid' });
+    }
+  });
+
+  console.log(`Listening to api shorturl\t`+new URL(url).hostname);
+
+ // res.json({ greeting: 'hello API' });
 });
 
 app.listen(port, function() {
