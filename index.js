@@ -6,6 +6,8 @@ const bodyparser = require('body-parser');
 const dns = require('dns');
 const { url } = require('inspector');
 
+var shorturl = 0 ;
+var urlstack=[]; 
 // Basic Configuration
 const port = process.env.PORT || 3000;
 
@@ -30,7 +32,13 @@ app.post('/api/shorturl', function(req, res) {
     if (err) {
       return res.status(404).send({ error: 'invalid url' });
     } else {
-      return res.status(200).send({ message: 'URL is valid' });
+      shorturl =+ 1 ;
+      let urlobject = {
+        original_url : url ,
+        short_url : shorturl
+      }
+       urlstack.push(urlobject);
+      
     }
   });
 
