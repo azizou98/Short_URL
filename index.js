@@ -23,10 +23,13 @@ app.get('/', function(req, res) {
 // Your first API endpoint
 app.post('/api/shorturl', function(req, res) {
   const url = req.body.url;
+
   // validating the http part alone
-  if (!url || !url.startsWith('http') || !url.startsWith('https')) {
-    return res.status(400).send({ error: 'invalid url' });
-  }
+  if (!url || !(url.startsWith('http')) || !(url.startsWith('https'))) 
+    {
+    return res.status(400).send({ error: 'invalid url boom '});
+    }
+
  // validating the hostname 
   dns.lookup(new URL(url).hostname, (err) => {
     if (err) {
@@ -36,17 +39,18 @@ app.post('/api/shorturl', function(req, res) {
       let urlobject = {
         original_url : url ,
         short_url : shorturl
-      }
+      };
        urlstack.push(urlobject);
-       res.json(urlobject)
+       res.json(urlobject);
     }
   });
 
   console.log(`Listening to api shorturl\t`+new URL(url).hostname);
 });
 
-app.get('/', function(req, res) {
-  res.sendFile(process.cwd() + '/views/index.html');
+app.get('/api/shorturl/:', function(req, res) {
+  
+  
 });
 
 app.listen(port, function() {
